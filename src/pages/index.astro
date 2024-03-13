@@ -2,17 +2,22 @@
 import Layout from '../layouts/Layout.astro';
 import ReactCalendar from "../components/Calendar"
 import {supabase} from "../db/supabase"
+try{
 
-if(Astro.request.method === 'POST'){
-	const formData = await Astro.request.formData();
-
-	await supabase.from("react-schedule").insert({
-		title: formData.get("title"),
-		start: formData.get("startDate"),
-		end: formData.get("endDate")
-	})
-	// console.log(formData);
-} 
+	if(Astro.request.method === 'POST'){
+		const formData = await Astro.request.formData();
+		
+		await supabase.from("react-schedule").insert({
+			title: formData.get("title"),
+			start: formData.get("startDate"),
+			end: formData.get("endDate")
+		})
+		// console.log(formData);
+	} 
+} catch(e){
+	console.error(e.message);
+	
+}
 ---
 
 <Layout title="Welcome to Astro.">
