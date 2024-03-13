@@ -1,0 +1,54 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ReactCalendar from "../components/Calendar"
+import {supabase} from "../db/supabase"
+
+if(Astro.request.method === 'POST'){
+	const formData = await Astro.request.formData();
+
+	await supabase.from("react-schedule").insert({
+		title: formData.get("title"),
+		start: formData.get("startDate"),
+		end: formData.get("endDate")
+	})
+	// console.log(formData);
+} 
+---
+
+<Layout title="Welcome to Astro.">
+	<div class="container justify-center flex gap-1 mx-auto mt-10">
+		<div class="w-1/5 bg-gray-200 p-2">
+			<h2 class="text-center font-bold ">予定入力</h2>
+			<form action="/" method="post" class="flex flex-col items-center gap-3">
+				<div>
+					<label for="title">件名
+						<input type="text" id="title" name="title" class="w-full py-1">
+					</label>
+				</div>
+				<div>
+					<label for="startDate">開始日時
+						<input type="datetime-local" class="w-full p-1" id="startDate" name="startDate">
+					</label>
+				</div>
+				<div>
+					<label for="endDate">終了日時
+						<input type="datetime-local" class="w-full p-1" id="endDate" name="endDate">
+					</label>
+				</div>
+				<button class="p-1 bg-yellow-800 w-4/5 mt-5">入力</button>
+			</form>
+		</div>
+		<ReactCalendar client:load/>
+	</div>
+</Layout>
+
+<style :global>
+	main {
+		margin: auto;
+		padding: 1rem;
+		width: 800px;
+		max-width: calc(100% - 2rem);
+		font-size: 20px;
+		line-height: 1.6;
+	}
+</style>
